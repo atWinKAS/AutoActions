@@ -3,15 +3,15 @@
 	
 	var token = '';
 	var actionServerReady = false;
-	var serverUrl = 'http://localhost:58341';
+	var serverUrl = 'http://pfactionsserver.azurewebsites.net';
 
 	var wireEvents = function(){
 		var sendButtons = $(':input[data-pfaa]');
 		sendButtons.each(function () {
 			var jqBtn = $(this);
 			if (jqBtn.attr('data-pfaa') === 'sendButton'){
-				jqBtn.click(function(){
-					if (actionServerReady && token.length > 0){
+			    jqBtn.click(function () {
+			        if (actionServerReady && token.length > 0){
 						var data = collectData();					
 						sendData(data);
 					} else {
@@ -25,30 +25,27 @@
 	
 	var collectData = function(){
 		var inputs = $(':input[data-pfaa]');
-		var data = [];
-
+		var data = {};
 		inputs.each(function (index, elem) {
 			var jqElem = $(elem);
 			if (jqElem.attr('data-pfaa') !== 'sendButton'){
-				data.push({
-					id: index+1,
-					key: jqElem.attr('data-pfaa'),
-					val: jqElem.val()
-				});     
+			    data[jqElem.attr('data-pfaa')] = jqElem.val();			    
 			}
 		});		
 		
 		return data;
 	};
 	
-	var sendData = function(data){
-		var request = {
-			token: token,
-			subject: 'TEST',
-			body: 'AAA AA'
+	var sendData = function (data) {
+	    var request = {
+		    token: token,
+		    address: data.emailAddress,
+		    subject: data.emailSubject,
+		    body: data.emailText
+			
 		};
-		console.log(request);
-		$.post(serverUrl + '/api/letters', request, function (response) {
+
+	    $.post(serverUrl + '/api/letters', request, function (response) {
 			console.log(response);
 		}, 'json').error(function (req, status, error) {
 			console.log(error);
