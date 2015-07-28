@@ -1,0 +1,16 @@
+// jquery way
+<script type="text/javascript">
+	$(document).ready(function(){
+		// actions here
+	});
+</script>
+
+
+// javascript way
+
+<script type="text/javascript">
+	window.onload = function(){
+		// action here
+	};
+</script>
+
